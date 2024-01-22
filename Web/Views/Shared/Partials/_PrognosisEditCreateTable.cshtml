@@ -1,0 +1,74 @@
+@using Microsoft.AspNetCore.Razor.Language
+@model Web.ViewModels.PrognosisEditCreateViewModel
+<form asp-action="EditPrognosis" method="post" asp-controller="Prognoses">
+    <div class="bg-base-200 rounded p-3 shadow">
+        <table class="table-lg rounded border">
+            <tbody class="rounded">
+            <tr class="border border-black">
+                <th>
+                    Afdeling
+                </th>
+                @for (int i = 0; i < Model.Prognosis.Count; i++)
+                
+                {
+                    <input type="hidden" asp-for="Prognosis[i].Id"/>
+                    <input type="hidden" asp-for="Prognosis[i].Department"/>
+                    <input type="hidden" asp-for="Prognosis[i].Date"/>
+                    <input type="hidden" asp-for="Prognosis[i].Branch"/>
+                    <input type="hidden" asp-for="Prognosis[i].BranchId"/>
+                    if (Model.Prognosis[i].Department == Departments.Checkout)
+                    {
+                        <td class="uppercase font-semibold">
+                            @Model.Prognosis[i].Date.ToString("ddd", new CultureInfo("nl-NL"))
+                            @Model.Prognosis[i].Date.ToString("dd-MM", new CultureInfo("nl-NL"))
+                        </td>
+                    }
+                }
+            </tr>
+            <tr class="border border-black">
+                <th>Vers</th>
+                @for (int i = 0; i < Model.Prognosis.Count; i++)
+                {
+                    if (Model.Prognosis[i].Department == Departments.Fresh)
+                    {
+                        var workers = Model.Prognosis[i].NumberOfHours / 8;
+                        <td>
+                            <input class="input input-xs input-bordered w-14" type="number" asp-for="Prognosis[i].NumberOfHours" value="@Model.Prognosis[i].NumberOfHours"/>
+                            <p class="text-green-600">@workers pers.</p>
+                        </td>
+                    }
+                }
+            </tr>
+            <tr class="border border-black">
+                <th>Kassa</th>
+                @for (int i = 0; i < Model.Prognosis.Count; i++)
+                {
+                    if (Model.Prognosis[i].Department == Departments.Checkout)
+                    {
+                        var workers = Model.Prognosis[i].NumberOfHours / 8;
+                        <td>
+                            <input class="input input-xs input-bordered w-14" type="number" asp-for="Prognosis[i].NumberOfHours" value="@Model.Prognosis[i].NumberOfHours"/>
+                            <p class="text-green-600">@workers pers.</p>
+                        </td>
+                    }
+                }
+            </tr>
+            <tr class="border border-black">
+                <th>Vakkenvullen</th>
+                @for (int i = 0; i < Model.Prognosis.Count; i++)
+                {
+                    if (Model.Prognosis[i].Department == Departments.Dkw)
+                    {
+                        var workers = Model.Prognosis[i].NumberOfHours / 8;
+                        <td>
+                            <input class="input input-xs input-bordered w-14" type="number" asp-for="Prognosis[i].NumberOfHours" value="@Model.Prognosis[i].NumberOfHours"/>
+                            <p class="text-green-600">@workers pers.</p>
+                        </td>
+                    }
+                }
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <button type="submit" class="btn btn-sm btn-primary mt-3 self-end">Opslaan</button>
+</form>

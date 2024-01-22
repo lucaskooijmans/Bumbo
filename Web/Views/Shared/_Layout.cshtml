@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="icon" type="image/x-icon" href="~/images/bumbo_b.svg">
+    <title>@ViewData["Title"] - Bumbo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+          integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true"/>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+</head>
+<body class="max-h-screen flex flex-row bg-gray-100">
+@Html.Partial("_Menu")
+<div class="flex-1 max-h-100">
+    @Html.Partial("_Breadcrumbs")
+    <main role="main" class="flex-1 p-5">
+        @RenderBody()
+    </main>
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+@await RenderSectionAsync("Scripts", false)
+<script>
+    $(document).ready(function () {
+        var currentPath = window.location.pathname;
+        var segments = currentPath.split('/').filter(function (segment) {
+            return segment !== "";
+        });
+
+        var breadcrumbList = $("#breadcrumb-list");
+
+        breadcrumbList.append('<li><a href="/">Home</a></li>');
+
+        var urlSoFar = "/";
+        segments.forEach(function (segment) {
+            urlSoFar += segment + "/";
+            breadcrumbList.append('<li><a href="' + urlSoFar + '">' + segment + '</a></li>');
+        });
+    });
+</script>
+<script>
+$(document).ready(function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const error = urlParams.get('error');
+    const success = urlParams.get('success');
+    if (error != null) {
+        showErrorToast(error);
+    }   
+    if (success != null) {
+        showSuccessToast(success);
+    } 
+});
+</script>
+</body>
+</html>

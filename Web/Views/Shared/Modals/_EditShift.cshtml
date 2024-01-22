@@ -1,0 +1,336 @@
+<dialog id="DeleteShift" class="modal">
+    <div class="modal-box w-1/2 ">
+        <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                <i class="fa-solid fa-x"></i>
+            </button>
+        </form>
+        <div class="flex flex-col space-y-3">
+            <input type="hidden" id="shiftId"/>
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="font-bold text-lg">Bewerken dienst: <span id="shiftTime"></span></h2>
+                    <div class="font-semibold text-md">Werknemer: <span id="Employee"></span></div>
+                </div>
+                <button id="sickButton" class="btn btn-warning btn-sm" onclick="setSick()">Meld ziek</button>
+            </div>
+
+            <div class="flex space-x-3">
+                <input type="time" class="input w-full" id="start" pattern="[0-9]{2}:[0-9]{2}"/>
+                <input type="time" class="input w-full" id="end" pattern="[0-9]{2}:[0-9]{2}"/>
+            </div>
+
+            <div>
+                <select class="select select-bordered w-full" id="department">
+
+                    @foreach (Departments department in Enum.GetValues(typeof(Departments)))
+                    {
+                        <option value="@department">@department.GetDisplayName()</option>
+                    }
+                </select>
+            </div>
+
+            <div class="modal-action flex justify-between">
+                <div class="flex flex-row space-x-3">
+                    <button class="btn btn-error" onclick="deleteShift()">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
+                <div class="flex flex-row space-x-3">
+                    <button class="btn btn-success" onclick="saveChanges()"><i class="fa-solid fa-check"></i>Aanpassing opslaan</button>
+                    <form method="dialog">
+                        <button class="btn">Sluiten</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</dialog>
+
+<dialog id="AddShift" class="modal">
+    <div class="modal-box w-1/2 ">
+        <div class="flex flex-col space-y-3">
+            <div>
+                <h2 class="font-bold text-lg">Aanmaken dienst <span id="shiftTime"></span></h2>
+            </div>
+
+            <div class="flex space-x-3">
+                <input type="time" class="input input-bordered w-full" id="startTime" pattern="[0-9]{2}:[0-9]{2}"/>
+                <input type="time" class="input input-bordered w-full" id="endTime" pattern="[0-9]{2}:[0-9]{2}"/>
+            </div>
+
+            <div>
+                <select class="select select-bordered w-full" id="departmentSelect">
+
+                    @foreach (Departments department in Enum.GetValues(typeof(Departments)))
+                    {
+                        <option value="@department">@department.GetDisplayName()</option>
+                    }
+                </select>
+            </div>
+
+            <div class="modal-action">
+                <button class="btn btn-success" onclick="saveTime()"><i class="fa-solid fa-users"></i>Medewerkers selecteren</button>
+                <form method="dialog">
+                    <button class="btn">Sluiten</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</dialog>
+<dialog id="SelectEmployees" class="modal">
+    <div class="modal-box w-1/2 ">
+        <div class="flex flex-col space-y-3">
+            <div>
+                <h2 class="font-bold text-lg">Selecteren medewerkers</h2>
+            </div>
+            <div>
+                <input id="startTimeEmployee" hidden/>
+                <input id="endTimeEmployee" hidden/>
+                <input id="departmentEmployee" hidden/>
+            </div>
+            <div>
+                <select class="w-full" id="SelectEmployeesSelector" multiple>
+                </select>
+            </div>
+            <div class="modal-action">
+                <button class="btn btn-success" onclick="saveShift()"><i class="fa-solid fa-check"></i>Dienst opslaan</button>
+            </div>
+        </div>
+    </div>
+</dialog>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.1/select2.min.js" integrity="sha512-cvmdmfILScvBOUbgWG7UbDsR1cw8zuaVlafXQ3Xu6LbgE0Ru6n57nWbKSJbQcRmkQodGdDoAaZOzgP4CK6d4yA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.1/select2.min.css" integrity="sha512-I3Xmcu7DAdHgmDqMusus1zzJJs6fZRiiGkmbTpL77JVI2wH7/zH/FF1T2FhlNqkOW9FgixkwZft4ttRx3Rj1AA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+<script>
+    let currentDate = null
+    let currentMonth = null
+    let currentYear = null
+
+    function splitTime(time) {
+        let split = time.split(":");
+        let hours = split[0];
+        let minutes = split[1];
+        hours = parseInt(hours)
+        minutes = parseInt(minutes);
+        return {
+            hours: hours,
+            minutes: minutes
+        };
+    }
+    
+    function setCreateTime(date) {
+        currentDate = date.getDate();
+        currentMonth = date.getMonth() + 1;
+        currentYear = date.getFullYear();
+        
+        let startTime = document.getElementById("startTime");
+        let endTime = document.getElementById("endTime");
+        let hours = date.getHours();
+        if (hours < 10) {
+            hours = "0" + hours;
+        }
+        let minutes = date.getMinutes();
+        if (minutes < 10) {
+            minutes = "0" + minutes;
+        }
+        
+        startTime.setAttribute("value", hours + ":" + minutes + ":00");
+        endTime.setAttribute("value", hours + ":" + minutes + ":00");
+    }
+
+    function setEvent(event) {
+        document.getElementById("shiftId").value = event.id;
+        document.getElementById("shiftTime").innerHTML = event.title;
+        document.getElementById("Employee").innerHTML = event.extendedProps.employee;
+        document.getElementById("start").value = event.extendedProps.shiftStart;
+        document.getElementById("end").value = event.extendedProps.shiftEnd;
+        document.getElementById("department").value = event.extendedProps.department;
+        if (event.extendedProps.status === "Sick") {
+            document.getElementById("sickButton").style = "display: none";
+        }
+        else 
+        {
+            document.getElementById("sickButton").style = "display: block";
+        }
+    }
+    
+    function setEmployees(data, startTime, endTime, department) {
+        let startTimeElement = document.getElementById("startTimeEmployee");
+        let endTimeElement = document.getElementById("endTimeEmployee");
+        let departmentElement = document.getElementById("departmentEmployee");
+        
+        startTimeElement.setAttribute("value", startTime);
+        endTimeElement.setAttribute("value", endTime);
+        departmentElement.setAttribute("value", department);
+       
+        let select = document.getElementById("SelectEmployeesSelector");
+        for (let i = 0; i < data.length; i++) {
+            let option = document.createElement("option");
+            option.text = data[i].firstName + " " + data[i].lastName;
+            option.value = data[i].id;
+            select.appendChild(option);
+        }
+    }
+    
+    function saveTime() {
+        let startTime = document.getElementById("startTime").value;
+        let endTime = document.getElementById("endTime").value;
+        let department = document.getElementById("departmentSelect").value;
+        
+        let data = {
+            StartHour : splitTime(startTime).hours,
+            StartMinute : splitTime(startTime).minutes,
+            EndHour : splitTime(endTime).hours,
+            EndMinute : splitTime(endTime).minutes,
+            currentDate : currentDate,
+            currentMonth : currentMonth,
+            currentYear : currentYear,
+        };
+                
+        $.ajax({
+            type: "POST",
+            url: "api/roster/getAvailableEmployees",
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: function (response) {
+                document.getElementById("AddShift").close();
+                document.getElementById("SelectEmployees").showModal();
+                setEmployees(response, startTime, endTime, department)
+            }
+        });
+    }
+    
+    function saveShift() {
+        let startTime = document.getElementById("startTimeEmployee").value;
+        let endTime = document.getElementById("endTimeEmployee").value;
+        let employees = document.getElementById("SelectEmployeesSelector").selectedOptions;
+        let department = document.getElementById("departmentEmployee").value;
+        
+        employees = Array.from(employees, option => option.value);
+                
+        employeeArray = {};
+        for (let i = 0; i < employees.length; i++) {
+            employeeArray[i.toString()] = employees[i];
+        }
+        
+        let data = {
+            StartHour : splitTime(startTime).hours,
+            StartMinute : splitTime(startTime).minutes,
+            EndHour : splitTime(endTime).hours,
+            EndMinute : splitTime(endTime).minutes,
+            currentDate : currentDate,
+            currentMonth : currentMonth,
+            currentYear : currentYear,
+            Employees : employeeArray,
+            Department : department
+        };
+                
+        $.ajax({
+            type: "POST",
+            url: "api/roster/create",
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: function (response) {
+                document.getElementById("SelectEmployees").close();
+                refreshCalendar();
+                showSuccessToast("Dienst aangemaakt!");
+            }
+        });
+    }
+    
+    function saveChanges() {
+        let startTime = document.getElementById("start").value;
+        let endTime = document.getElementById("end").value;
+        let shiftId = document.getElementById("shiftId").value;
+        shiftId = parseInt(shiftId);
+        let department = document.getElementById("department").value;
+         
+        let data = {
+            StartHour : splitTime(startTime).hours,
+            StartMinute : splitTime(startTime).minutes,
+            EndHour : splitTime(endTime).hours,
+            EndMinute : splitTime(endTime).minutes,
+            ShiftId : shiftId,
+            Department : department
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "api/roster/update",
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: function () {
+               document.getElementById("DeleteShift").showModal();
+                refreshCalendar();
+                showSuccessToast("Dienst aangepast!");            
+            }
+        });
+        
+    }
+    
+    function deleteShift() {
+        let id = document.getElementById("shiftId").value;
+        let shift = {
+            ShiftId: parseInt(id),
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "api/roster/delete",
+            contentType: 'application/json',
+            data: JSON.stringify(shift),
+            success: function (data) {
+               document.getElementById("DeleteShift").close();
+               refreshCalendar();
+               showSuccessToast("Dienst verwijderd!");            
+            }
+        });
+    }
+    function setSick() {
+        let shiftId = document.getElementById("shiftId").value;
+
+        // Assuming the data format expected by your API
+        let data = {
+            ShiftId: parseInt(shiftId),
+            // Add other properties if needed
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "api/roster/setSick",
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function (response) {
+                document.getElementById("DeleteShift").close();
+                refreshCalendar();
+                showSuccessToast("Ziekmelding succesvol!");
+            },
+            error: function (error) {
+                // Handle the error response if needed
+                console.error("Error marking shift as sick:", error);
+            }
+        });
+    }
+    
+    publishShifts = function (date) {
+        let data = {
+            currentDate : date.getDate(),
+            currentMonth : date.getMonth() + 1,
+            currentYear : date.getFullYear(),
+        };
+        
+        $.ajax({
+            type: "POST",
+            url: "api/roster/publish",
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: function () {
+                refreshCalendar();
+                showSuccessToast("Rooster gepubliceerd!");   
+            }
+        });
+    }
+</script>

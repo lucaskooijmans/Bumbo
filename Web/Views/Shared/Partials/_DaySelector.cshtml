@@ -1,0 +1,28 @@
+@model Web.ViewModels.WorkedHoursViewModel
+<div class="flex justify-between items-center text-center space-x-3 w-fit">
+    <a class="btn btn-sm btn-warning rounded" asp-controller="WorkedHours" asp-action="Index" asp-route-date="@Model.Date.AddDays(-1)">
+        <i class="fa-solid fa-chevron-left"></i>
+    </a>
+    <div class="flex flex-col text-center">
+        <h3 class="text-sm font-bold">Week @Model.WeekNumber - @Model.Date.Year</h3>
+        <p class="text-xs">
+            @Model.Date.ToString("d MMMM", new CultureInfo("nl-NL"))
+        </p>
+    </div>
+
+    @if (Model.Date.Date == DateTime.Now.Date)
+    {
+        <a class="btn btn-sm btn-disabled rounded">
+            <i class="fa-solid fa-chevron-right"></i>
+        </a>
+    }
+    else
+    {
+        <a class="btn btn-sm btn-warning rounded"
+           asp-controller="WorkedHours"
+           asp-action="Index"
+           asp-route-date="@Model.Date.AddDays(1)">
+            <i class="fa-solid fa-chevron-right"></i>
+        </a>
+    }
+</div>

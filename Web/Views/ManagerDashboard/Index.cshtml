@@ -1,0 +1,86 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div id='calendar' class="max-h-full"></div>
+
+<script type="" src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.9/index.global.min.js"></script>
+<script>
+   let calendar;
+
+  document.addEventListener('DOMContentLoaded', function() {
+    let calendarEl = document.getElementById('calendar');
+  
+    calendar = new FullCalendar.Calendar(calendarEl, {
+      schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+      customButtons: {
+        addShift: {
+          text: 'Dienst toevoegen',
+          click: function(info) {
+            document.getElementById("AddShift").showModal();
+            setCreateTime(calendar.getDate());
+          }
+        },
+        publishShifts: {
+          text: 'Rooster publiceren',
+          click: function(info) {
+            publishShifts(calendar.getDate());
+          }
+        }
+      },
+      headerToolbar: {
+        left: 'today prev,next addShift',
+        center: 'title',
+        right: 'publishShifts resourceTimelineDay,resourceTimelineWeek'
+      },
+      aspectRatio: 1.6,
+      initialView: 'resourceTimelineDay',
+      resourceGroupField: 'group',
+      resourceOrder: 'group',
+      resources: "api/roster/resources",
+      eventSources: [
+              {
+                url: "api/roster/events?department=Checkout",
+                color : '#377cfb'
+              },
+              {
+                url: "api/roster/events?department=Dkw",
+                color : '#ffbe00'
+              },
+              {
+                url: "api/roster/events?department=Fresh",
+                color : '#65cc8a'
+              },
+              {
+                url: "api/roster/GroupedEvents?department=Checkout",
+                color : '#377cfb'
+              },
+              {
+                url: "api/roster/GroupedEvents?department=Dkw",
+                color : '#ffbe00'
+              },
+              {
+                url: "api/roster/GroupedEvents?department=Fresh",
+                color : '#65cc8a'
+              }
+      ],
+        eventClick: function(info) {
+            document.getElementById("DeleteShift").showModal();
+            setEvent(info.event);
+        },
+        datesSet: (data => {
+          dateSet(data);
+        }),
+    });
+    
+    calendar.render();
+  });
+  
+  function refreshCalendar() {
+    calendar.refetchEvents();
+  }
+</script>
+
+@Html.Partial("Partials/_PrognosisDayTable")
+
+@Html.Partial("Modals/_EditShift")

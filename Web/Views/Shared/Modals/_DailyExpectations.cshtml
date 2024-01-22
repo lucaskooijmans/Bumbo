@@ -1,0 +1,73 @@
+@model Web.ViewModels.PrognosisViewModel
+<dialog id="dailyExpectations" class="modal">
+    <div class="modal-box  w-11/12 max-w-2xl">
+        <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                <i class="fa-solid fa-x"></i>
+            </button>
+        </form>
+        <form method="get" asp-controller="Prognoses" asp-action="Create">
+            <input type="hidden" value="@Model.Date" asp-for="Date">
+            <div class="space-y-2">
+                <div class="flex flex-col text-center">
+                    <h3 class="text-xl font-bold uppercare">Verwachtingen</h3>
+                    <p class="text-xs font-semibold"><span id="selected">0</span> / 8 geselecteerd</p>
+                </div>
+                <input type="hidden" id="selectedWeeksInput" name="SelectedWeeks"/>
+                @foreach (var dailyExpectation in Model.DailyExpectationsLastEightWeeks)
+                {
+                    <div class="border-solid border-2 collapse collapse-arrow bg-base-200 w-full align-middle">
+                        <input type="radio" name="my-accordion-2" class="z-10"/>
+                        <div class="collapse-title text-md font-medium flex items-center space-x-5">
+                            <input type="checkbox" class="checkbox checkbox-sm z-50" onclick="countSelectedCheckboxes()" value="@dailyExpectation.Key"/>
+                            <p>Week @dailyExpectation.Key - @dailyExpectation.Value.First().Date.Year</p>
+                        </div>
+                        <div class="collapse-content flex">
+                            <table class="flex-grow border-solid border-black border-2 text-right">
+                                <thead>
+                                <tr>
+                                    <th class="p-2">Dagen</th>
+
+                                    @foreach (var dailyExpectationValue in dailyExpectation.Value)
+                                    {
+                                        <th class="border-solid border-black border-l-2 p-2 uppercase">@dailyExpectationValue.Date.ToString("ddd", new CultureInfo("nl-NL"))</th>
+                                    }
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="p-2">Aantal klanten colli</td>
+                                    @foreach (var dailyExpectationValue in dailyExpectation.Value)
+                                    {
+                                        <td class="border-solid border-black border-l-2 p-2">@dailyExpectationValue.ExpectedColli</td>
+                                    }
+                                </tr>
+                                <tr>
+                                    <td class="p-2">Aantal klanten verwacht </td>
+                                    @foreach (var dailyExpectationValue in dailyExpectation.Value)
+                                    {
+                                        <td class="border-solid border-black border-l-2 p-2">@dailyExpectationValue.ExpectedCustomers</td>
+                                    }
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="modal-action">
+                <button type="submit" class="btn btn-sm btn-primary">Gebruiken</button>
+            </div>
+        </form>
+    </div>
+</dialog>
+<script>
+ function countSelectedCheckboxes() {
+        let selectedCheckboxes = document.querySelectorAll("input[type=checkbox]:checked");
+        let count = selectedCheckboxes.length;
+                        document.getElementById("selected").textContent = count;
+
+        const selectedValues = Array.from(selectedCheckboxes).map(checkbox => checkbox.value);
+        document.getElementById('selectedWeeksInput').value = selectedValues.join(',');
+}
+</script>

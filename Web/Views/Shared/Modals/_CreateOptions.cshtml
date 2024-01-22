@@ -1,0 +1,40 @@
+<dialog id="showPrognoseCreationOptions" class="modal modal-xl">
+    <div class="modal-box w-1/2">
+        <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                <i class="fa-solid fa-x"></i>
+            </button>
+        </form>
+        <div class="space-y-4">
+            <div class="flex flex-col text-center">
+                <h3 class="text-2xl font-bold uppercare">Kies een optie</h3>
+            </div>
+            <form method="dialog">
+                <div class="border-solid border-2 bg-base-200 w-full align-middle rounded">
+                    <a class="flex space-x-4 items-center p-3" asp-controller="Prognoses" asp-action="Create" asp-route-date="@Model.Date">
+                        <div>
+                            <i class="fa-regular fa-file text-3xl"></i>
+                        </div>
+                        <div class="flex flex-col">
+                            <h3 class="text-xl font-bold uppercare">Verwachting invoeren vanaf nul</h3>
+                            <p class="text-xs font-light">Kies deze optie om een nieuwe verwachting in te voeren. Vul het lege formulier in met de benodigde gegevens.</p>
+                        </div>
+                    </a>
+                </div>
+            </form>
+            <form method="dialog">
+                <div class="border-solid border-2 bg-base-200 w-full align-middle rounded" onclick="dailyExpectations.showModal()">
+                    <div class="flex space-x-4 items-center p-3">
+                        <div>
+                            <i class="fa-solid fa-copy text-3xl"></i>
+                        </div>
+                        <div class="flex flex-col">
+                            <h3 class="text-xl font-bold uppercare">Historische gegevens gebruiken</h3>
+                            <p class="text-xs font-light">Kopieer en selecteer uit laatste 8 weken. Het systeem berekent het dagelijkse gemiddelde als je meerdere weken kiest.</p>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</dialog>

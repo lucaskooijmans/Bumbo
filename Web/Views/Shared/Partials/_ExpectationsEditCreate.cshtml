@@ -1,0 +1,52 @@
+@model Web.ViewModels.PrognosisEditCreateViewModel
+
+    <div class="bg-base-200 rounded p-3 shadow">
+        <table class="table-lg rounded border">
+            <tbody class="rounded">
+            <input type="hidden" asp-for="Date" value="@Model.Date"/>
+            <tr class="border border-black">
+                <th>
+                    Verwachting
+                </th>
+                @for (int i = 0; i < 7; i++)
+                {
+                    <input type="hidden" value="@Model.Date.AddDays(i)" asp-for="Expectations[i].Date"/>
+                    <input type="hidden" asp-for="Expectations[i].Id"/>
+                    <input type="hidden" asp-for="Expectations[i].Branch"/>
+                    <input type="hidden" value="1" asp-for="Expectations[i].BranchId"/>
+                    var currentDate = Model.Date.AddDays(i);
+                    <td class="uppercase font-semibold">
+                        @currentDate.ToString("ddd", new CultureInfo("nl-NL"))
+                        @currentDate.ToString("dd-MM", new CultureInfo("nl-NL"))
+                    </td>
+                }
+            </tr>
+            <tr class="border border-black">
+                <th>Colli's</th>
+                @for (int i = 0; i < 7; i++)
+                {
+                    <td>
+                        <div class="form-group">
+                            <input asp-for="@Model.Expectations[i].ExpectedColli" type="number" required min="0"
+                                   class="form-control input input-xs input-bordered w-14">
+
+                        </div>
+                    </td>
+                }
+            </tr>
+            <tr class="border border-black">
+                <th>Klanten</th>
+                @for (int i = 0; i < 7; i++)
+                {
+                    <td>
+                        <div class="form-group">
+                            <input asp-for="@Model.Expectations[i].ExpectedCustomers" type="number" required min="0"
+                                   class="form-control input input-xs input-bordered w-14">
+                        </div>
+                    </td>
+                }
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    

@@ -1,0 +1,53 @@
+@model Web.ViewModels.PrognosisViewModel
+<div class="flex flex-row flex-grow flex-1 w-full min-h-full max-h-full  justify-end items-start self-start @(Model.Prognosis.Any() ? "" : "hidden")">
+    <div class="w-3/4 max-w-lg flex flex-col">
+        <div class="flex space-x-4 bg-base-200 rounded p-3 items-center justify-center">
+            <div class="flex flex-col justify-end text-end">
+                <div class="text-left font-bold">
+                    Activiteit
+                </div>
+                @foreach (Norm norm in @Model.Norms)
+                {
+                    <p>
+                        @norm.Type
+                    </p>
+                }
+            </div>
+            <div class="flex flex-col">
+                <div class="text-left font-bold">
+                    Norm
+                </div>
+                @foreach (Norm norm in @Model.Norms)
+                {
+                    @if (norm.Type == Data.Enums.NormTypes.Stock || norm.Type == Data.Enums.NormTypes.Unpack)
+                    {
+                        <p>
+                            @norm.Value minuten
+                        </p>
+                    }
+                    @if (norm.Type == Data.Enums.NormTypes.Checkout)
+                    {
+                        <p>
+                            1 kassière per @norm.Value klanten per uur
+                        </p>
+                    }
+                    @if (norm.Type == Data.Enums.NormTypes.Fresh)
+                    {
+                        <p>
+                            1 medewerker per @norm.Value klanten per uur
+                        </p>
+                    }
+                    @if (norm.Type == Data.Enums.NormTypes.Mirroring)
+                    {
+                        <p>
+                            @norm.Value seconden per meter
+                        </p>
+                    }
+                }
+            </div>
+        </div>
+        <a asp-controller="Settings" asp-action="Settings" class="btn btn-sm btn-warning mt-3" required min="0">
+            Normeringen aanpassen
+        </a>
+    </div>
+</div>

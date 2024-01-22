@@ -1,0 +1,14 @@
+@model Web.ViewModels.ShiftViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="uppercase py-4 font-bold">Diensten</h1>
+
+<a class="btn btn-sm btn-secondary rounded text-white" asp-controller="Shift" asp-action="Create">
+    <i class="fa-solid fa-plus"></i> Toevoegen
+</a>
+
+

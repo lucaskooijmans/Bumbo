@@ -1,0 +1,21 @@
+@model Web.ViewModels.ShiftViewModel
+
+<dialog id="showAcceptChangeRequest@(Model.Id)" class="modal">
+    <div class="modal-box">
+        <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                <i class="fa-solid fa-x"></i>
+            </button>
+        </form>
+        <h2 class="font-bold text-lg">Weet je zeker je deze dienst kan werken?</h2>
+        <span>
+            @Model.Start.DateName() | @Model.Start.Time() - @Model.End.Time()
+        </span>
+        <div class="modal-action">
+            <form asp-controller="EmployeeShift" asp-action="AcceptDenyChangeRequest" asp-route-id="@Model.Id">
+                <input type="hidden" name="AcceptDeny" value="true"/>
+                <button type="submit" class="btn btn-success"><i class="fa-solid fa-check"></i>Ja</button>
+            </form>
+        </div>
+    </div>
+</dialog>

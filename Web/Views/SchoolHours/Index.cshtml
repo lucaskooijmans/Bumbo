@@ -1,0 +1,31 @@
+@model Web.ViewModels.SchoolHoursViewModel
+@{
+    ViewBag.Title = "title";
+    Layout = "_EmployeeLayout";
+}
+
+<div class="flex flex-col space-y-5">
+    <div class="flex justify-between">
+        <span class="font-bold text-xl">
+            Schooluren
+        </span>
+        <a asp-controller="SchoolHours" asp-action="EditCreate" class="btn btn-sm btn-primary">
+            Bewerken
+        </a>
+    </div>
+
+    @if (Model.SchoolHours != null && Model.SchoolHours.Any())
+    {
+        @foreach (var schoolHour in Model.SchoolHours)
+        {
+            <div class="flex flex-col bg-gray-200 rounded p-3">
+                <span class="font-semibold text-md">@schoolHour.DayOfWeek</span>
+                <span>@schoolHour.Hours uren</span>
+            </div>
+        }
+    }
+    else
+    {
+        <p>Je hebt nog geen school uren opgegeven</p>
+    }
+</div>

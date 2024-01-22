@@ -1,0 +1,151 @@
+@model Web.ViewModels.EmployeeViewModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_layout";
+}
+
+<div class="flex flex-col space-y-5 pt-5">
+    <span class="font-bold text-xl">
+        Mederwerker aanmaken
+    </span>
+
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id"/>
+        <div class="flex w-full space-x-3">
+            <div class="w-full">
+                <div class="label">
+                    <span class="label-text">
+                        <label asp-for="FirstName"></label>
+                    </span>
+                </div>
+                <input asp-for="FirstName" type="text" class="input w-full"/>
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="w-full">
+                <div class="label">
+                    <span class="label-text">
+                        <label asp-for="LastName"></label>
+                    </span>
+                </div>
+                <input asp-for="LastName" type="text" class="input w-full"/>
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="flex w-full space-x-3">
+            <div class="w-full">
+                <div class="label">
+                    <span class="label-text">
+                        <label asp-for="PhoneNumber"></label>
+                    </span>
+                </div>
+                <input asp-for="PhoneNumber" type="input" class="input w-full"/>
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="w-full">
+                <div class="label">
+                    <span class="label-text">
+                        <label asp-for="Email"></label>
+                    </span>
+                </div>
+                <input asp-for="Email" type="email" class="input w-full"/>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="flex w-full space-x-3">
+            <div class="w-full">
+                <div class="label">
+                    <span class="label-text">
+                        <label asp-for="DateOfBirth"></label>
+                    </span>
+                </div>
+                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                <input asp-for="DateOfBirth" class="input w-full"/>
+            </div>
+            <div class="w-full">
+                <div class="label">
+                    <span class="label-text">
+                        <label asp-for="BSN"></label>
+                    </span>
+                </div>
+                <span asp-validation-for="BSN" class="text-danger"></span>
+                <input asp-for="BSN" class="input w-full"/>
+            </div>
+        </div>
+
+        <div class="flex w-full space-x-3">
+            <div class="w-full">
+                <div class="label">
+                    <span class="label-text">
+                        <label asp-for="PostalCode"></label>
+                    </span>
+                </div>
+                <span asp-validation-for="PostalCode" class="text-danger"></span>
+                <input asp-for="PostalCode" class="input w-full"/>
+            </div>
+            <div class="w-full">
+                <div class="label">
+                    <span class="label-text">
+                        <label asp-for="City"></label>
+                    </span>
+                </div>
+                <span asp-validation-for="City" class="text-danger"></span>
+                <input asp-for="City" class="input w-full"/>
+            </div>
+        </div>
+
+        <div class="flex w-full space-x-3">
+            <div class="w-full">
+                <div class="label">
+                    <span class="label-text">
+                        <label asp-for="HouseNumber"></label>
+                    </span>
+                </div>
+                <span asp-validation-for="HouseNumber" class="text-danger"></span>
+                <input asp-for="HouseNumber" class="input w-full"/>
+            </div>
+            <div class="w-full">
+                <div class="label">
+                    <span class="label-text">
+                        <label asp-for="Street"></label>
+                    </span>
+                </div>
+                <span asp-validation-for="Street" class="text-danger"></span>
+                <input asp-for="Street" class="input w-full"/>
+            </div>
+        </div>
+
+        <div class="flex w-full space-x-3">
+            <div class="w-full">
+                <div class="label">
+                    <span class="label-text">
+                        <label asp-for="Role"></label>
+                    </span>
+                </div>
+                <span asp-validation-for="Role" class="text-danger"></span>
+                <select asp-for="Role" class="input w-full">
+                    @foreach (var role in Enum.GetValues(typeof(Roles)))
+                    {
+                        <option name="@role">@role</option>
+                    }
+                </select>
+            </div>
+            <div class="w-full">
+                <div class="label">
+                    <span class="label-text">
+                        <label asp-for="Departments"></label>
+                    </span>
+                </div>
+                <span asp-validation-for="Departments" class="text-danger"></span>
+                <select asp-for="Departments" asp-items="Html.GetEnumSelectList<Departments>()" multiple class="input w-full"></select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-sm btn-primary mt-3 self-end">Opslaan</button>
+        </div>
+    </form>
+</div>

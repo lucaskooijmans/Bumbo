@@ -1,0 +1,45 @@
+@model Web.ViewModels.LoginViewModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_LoginLayout";
+}
+
+
+<div class="relative flex flex-col justify-center items-center h-screen overflow-hidden">
+    <div class="w-full p-6 m-auto bg-white rounded-md shadow-md lg:max-w-lg">
+        <h1 class="text-3xl font-semibold text-center text-yellow-400">Bumbo test</h1>
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach (var key in ViewData.ModelState.Keys)
+                    {
+                        foreach (var error in ViewData.ModelState[key].Errors)
+                        {
+                            <li>@error.ErrorMessage</li>
+                        }
+                    }
+                </ul>
+            </div>
+        }
+
+        <form asp-action="Login" asp-controller="Account" method="post" class="space-y-4">
+            <div>
+                <label class="label text-base label-text" asp-for="Email">
+                </label>
+                <input asp-for="Email" class="w-full input input-bordered @(ViewData.ModelState["Email"]?.Errors.Count > 0 ? "input-error" : "")"/>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div>
+                <label class="label text-base label-text" asp-for="Password">
+                </label>
+                <input asp-for="Password" class="w-full input input-bordered @(ViewData.ModelState["Password"]?.Errors.Count > 0 ? "input-error" : "")"/>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div>
+                <button class="btn btn-primary">Login</button>
+            </div>
+        </form>
+    </div>
+</div>

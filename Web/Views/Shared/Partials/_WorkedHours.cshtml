@@ -1,0 +1,52 @@
+@model Web.ViewModels.RegisteredHourViewModel
+
+<div class="rounded-lg bg-gray-300">
+    <div class="flex space-x-2">
+        <div class="rounded-s-lg w-5 @Model.BackgroundColor  left-0"></div>
+        <div class="flex flex-row space-x-4 w-full p-2">
+            <span class="font-bold text-md font-semibold w-2/12">
+                @Model.Employee.FullName
+                @Html.Hidden("EmployeeId", @Model.Employee.Id)
+            </span>
+            <span class="font-medium text-sm">
+                Gewerkt: @Model.Start.Time() - @Model.End?.Time()
+            </span>
+            <span class="font-medium text-sm">
+                Gepland: @Model.Shift?.Start.Time() - @Model.Shift?.End.Time()
+            </span>
+        </div>
+        <div class="flex space-x-3 items-center pr-2">
+            <input type="checkbox" class="checkbox checkbox-sm z-50" name="SelectedHoursIds" onclick="countSelectedCheckboxes()" value="@Model.Id"/>
+            @if (Model.Status == RegisteredHourStatus.Approved)
+            {
+                <i class="fa-solid fa-circle-check text-green-600"></i>
+            }
+            else
+            {
+                <i class="fa-solid fa-circle-xmark text-red-600"></i>
+            }
+            <a class="btn btn-sm btn-circle" onclick="showEditWorkedHours@(Model.Id).showModal()">
+                <i class="fa-solid fa-pencil text-sm"></i>
+            </a>
+            @Html.Hidden("Start_" + Model.Id, Model.Start.ToString("HH:mm:ss"))
+            @Html.Hidden("End_" + Model.Id, Model.End?.ToString("HH:mm:ss"))
+            @Html.Hidden("Employee_id" + Model.Id, Model.Employee.Id)
+        </div>
+    </div>
+</div>
+<script>
+ function countSelectedCheckboxes() {
+        let selectedCheckboxes = document.querySelectorAll("input[type=checkbox]:checked");
+        let count = selectedCheckboxes.length;
+        if (count > 0) {
+            document.getElementById('active').classList.remove("hidden")
+            document.getElementById('disabled').classList.add("hidden")
+        } else {
+            document.getElementById('disabled').classList.remove("hidden")
+            document.getElementById('active').classList.add("hidden")
+        }
+        
+        const selectedValues = Array.from(selectedCheckboxes).map(checkbox => checkbox.value);
+        document.getElementById('selectedHours').value = selectedValues.join(',');
+}
+</script>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="icon" type="image/x-icon" href="~/images/bumbo_b.svg">
+    <title>@ViewData["Title"] - Bumbo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+          integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true"/>
+</head>
+<body class="h-screen flex flex-col">
+<div class="flex-1 bg-gray-100">
+    <main role="main" class="pb-3 flex-1">
+        <div class="container mx-auto p-5">
+            @RenderBody()
+        </div>
+    </main>
+</div>
+<footer class="bg-gray-200 p-5">
+    <div class="container mx-auto flex justify-between">
+        <a asp-controller="EmployeeDashboard" asp-action="Index" class="flex flex-col justify-center text-center">
+            <i class="fa-solid fa-home"></i>
+            <span>
+                Home
+            </span>
+        </a>
+        <a asp-controller="EmployeeShift" asp-action="Index" class="flex flex-col justify-center text-center">
+            <i class="fa-solid fa-calendar-days"></i>
+            <span>
+                Rooster
+            </span>
+        </a>
+        <a asp-controller="Absence" asp-action="Index" class="flex flex-col justify-center text-center">
+            <i class="fa-solid fa-umbrella-beach"></i>
+            <span>
+                Verlof
+            </span>
+        </a>
+        <a  asp-controller="RegisteredHours" asp-action="Index"class="flex flex-col justify-center text-center">
+            <i class="fa-solid fa-clock"></i>
+            <span>
+                Uren
+            </span>
+        </a>
+        <a asp-controller="EmployeeDashboard" asp-action="Settings" class="flex flex-col justify-center text-center">
+            <i class="fa-solid fa-bars"></i>
+            <span>
+                Menu
+            </span>
+        </a>
+    </div>
+</footer>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", false)
+</body>
+</html>

@@ -1,0 +1,37 @@
+@model Web.ViewModels.PrognosisViewModel
+<div class="bg-base-200 rounded p-3 shadow @(Model.Expectations.Any() ? "" : "hidden")">
+    <table class="table-lg rounded border">
+        <tbody class="rounded">
+        <tr class="border border-black">
+            <th>
+                Verwachting
+            </th>
+            @foreach (var item in Model.Expectations)
+            {
+                <td class="uppercase font-semibold">
+                    @item.Date.ToString("ddd", new CultureInfo("nl-NL"))
+                    @item.Date.ToString("dd-MM", new CultureInfo("nl-NL"))
+                </td>
+            }
+        </tr>
+        <tr class="border border-black">
+            <th>Colli's</th>
+            @foreach (var item in Model.Expectations)
+            {
+                <td>
+                    <p>@item.ExpectedColli</p>
+                </td>
+            }
+        </tr>
+        <tr class="border border-black">
+            <th>Klanten</th>
+            @foreach (var item in Model.Expectations)
+            {
+                <td>
+                    <p>@item.ExpectedCustomers</p>
+                </td>
+            }
+        </tr>
+        </tbody>
+    </table>
+</div>

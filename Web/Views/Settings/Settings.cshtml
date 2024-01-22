@@ -1,0 +1,65 @@
+@model Web.ViewModels.SettingsViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var errors = ViewData.ModelState.Where(n => n.Value.Errors.Count > 0).ToList();
+}
+
+@foreach(var error in errors)
+{
+    if (error.Key == "Negatieve waarde")
+    {
+        <div class="alert alert-error">
+            @error.Key
+            <ul>
+                @foreach (var e in error.Value.Errors)
+                {
+                    <li>@e.ErrorMessage</li>
+                }
+            </ul>
+        </div>
+    }
+}
+
+<script src="https://unpkg.com/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://unpkg.com/jquery-validation@1.19.3/dist/jquery.validate.min.js"></script>
+<script src="https://unpkg.com/jquery-validation-unobtrusive@3.2.12/dist/jquery.validate.unobtrusive.min.js"></script>
+
+
+<div class="w-2/3 mx-auto">
+    <h1 class="text-2xl font-bold my-10 uppercase">Instellingen</h1>
+    <div class="flex flex-col">
+        <form asp-action="EditNorms" method="post">
+            <div class="bg-gray-300 p-3 rounded">
+                @for (var i = 0; i < Model.Norms.Count(); i++)
+                {
+                    var norm = Model.Norms.ElementAt(i);
+                    var key = Model.Norms.ElementAt(i).Type;
+
+                    <div class="flex space-x-4 space-y-4">
+                        <div class="flex flex-col justify-end text-end">
+                            <div class="text-left font-bold">
+                                Activiteit
+                            </div>
+                            <p>
+                                @norm.Type
+                            </p>
+                        </div>
+                        <div class="flex flex-col">
+                            <div class="text-left font-bold">
+                                Norm
+                            </div>
+                            <div class="form-group">
+                                <input asp-for="NormValues[key]" name="NormValues[@key]" value="@norm.Value" required class="input input-bordered w-full max-w-xs" />
+                                <span asp-validation-for="NormValues[key]" class="field-validation-error"></span>
+                                @Html.ValidationMessageFor(Model => Model.NormValues[key], "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <button type="submit" class="btn btn-sm btn-success mt-5">Update</button>
+        </form>
+    </div>
+</div>

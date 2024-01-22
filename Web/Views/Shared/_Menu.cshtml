@@ -1,0 +1,63 @@
+<nav class="h-screen bg-white w-24 flex justify-center">
+    <div class="flex flex-col space-y-3">
+        <div class="py-3 items-center w-full">
+            <img src="~/images/bumbo_b.svg" alt="My Image" class="h-12 w-12 object-cover"/>
+        </div>
+        <!-- Sidenav content goes here -->
+        <div class="flex flex-col justify-between h-full">
+            <ul class="flex flex-col w-max text-gray-500 space-y-3 mt-3 items-center">
+                <a asp-controller="ManagerDashboard" asp-action="Index">
+                    <li class="py-3 px-4 tooltip tooltip-right rounded hover:bg-gray-300 @(Context.Request.Path == "/" ? "bg-jumbo-yellow" : "") @(Context.Request.Path == "/ManagerDashboard" ? "bg-jumbo-yellow" : "")"
+                        data-tip="Home">
+                        <i class="fa-solid fa-home"></i>
+                    </li>
+                </a>
+                <a asp-controller="WorkedHours" asp-action="Index" asp-route-date="@DateTime.Now.Date">
+                    <li class="py-3 px-4 tooltip tooltip-right rounded hover:bg-gray-300 @(Context.Request.Path == "/WorkedHours" ? "bg-jumbo-yellow" : "")"
+                        data-tip="Gewerkte uren">
+                        <i class="fa-solid fa-clock"></i>
+                    </li>
+                </a>
+                <a asp-controller="Prognoses" asp-action="Index" asp-route-date="@DateTime.Now.Date">
+                    <li class="py-3 px-4 tooltip tooltip-right rounded hover:bg-gray-300 @(Context.Request.Path.StartsWithSegments("/Prognoses") ? "bg-jumbo-yellow" : "")"
+                        data-tip="Prognose">
+                        <i class="fa-solid fa-chart-column"></i>
+                    </li>
+                </a>
+                <a asp-controller="Employee" asp-action="Index">
+                    <li class="py-3 px-4 tooltip tooltip-right rounded hover:bg-gray-300 @(Context.Request.Path.StartsWithSegments("/Employee") ? "bg-jumbo-yellow" : "")"
+                        data-tip="Medewerkers">
+                        <i class="fa-solid fa-users"></i>
+                    </li>
+                </a>
+                <a asp-controller="Absence" asp-action="Evaluate" class="relative">
+                    <li class="py-3 px-4 tooltip tooltip-right rounded hover:bg-gray-300 @(Context.Request.Path.StartsWithSegments("/Absence") ? "bg-jumbo-yellow" : "")"
+                        data-tip="Verlof">
+                        <i class="fa-solid fa-umbrella-beach"></i>
+                        @await Component.InvokeAsync("OpenAbsenceRequests")
+                    </li>
+                </a>
+                <a asp-controller="EmployeeShift" asp-action="Evaluate" class="relative">
+                    <li class="py-3 px-4 tooltip tooltip-right rounded hover:bg-gray-300 @(Context.Request.Path.StartsWithSegments("/EmployeeShift") ? "bg-jumbo-yellow" : "")"
+                        data-tip="Ruilverzoek">
+                        <i class="fa-solid fa-rotate"></i>
+                    </li>
+                </a>
+            </ul>
+            <ul class="flex flex-col items-center w-max text-gray-500 space-y-3 mb-3 ">
+
+                <a asp-controller="Settings" asp-action="Settings">
+                    <li class="py-3 px-4 tooltip tooltip-right rounded hover:bg-gray-300 @(Context.Request.Path.StartsWithSegments("/Settings") ? "bg-jumbo-yellow" : "")"
+                        data-tip="Instellingen">
+                        <i class="fa-solid fa-gear"></i>
+                    </li>
+                </a>
+                <a asp-controller="Account" asp-action="Logout">
+                    <li class="py-3 px-4 tooltip tooltip-right rounded hover:bg-gray-300" data-tip="Uitloggen">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </li>
+                </a>
+            </ul>
+        </div>
+    </div>
+</nav>

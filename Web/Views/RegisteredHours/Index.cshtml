@@ -1,0 +1,47 @@
+﻿@model Web.ViewModels.RegisteredHoursViewModel
+@{
+    ViewBag.Title = "title";
+    Layout = "_EmployeeLayout";
+}
+
+<div class="flex flex-col space-y-5">
+    <span class="font-bold text-xl">
+        Geklokte uren
+    </span>
+    <div class="flex flex-col space-y-3">
+        @{
+            int previousWeekNumber = -1;
+
+            foreach (var hour in Model.RegisteredHours)
+            {
+                var currentWeekNumber = hour.Start.Week();
+
+                if (currentWeekNumber != previousWeekNumber)
+                {
+                        <span>Week @currentWeekNumber</span>
+                        previousWeekNumber = currentWeekNumber;
+                }
+                    
+                    <div class="rounded-lg bg-gray-300">
+                        <div class="flex space-x-2">
+                            <div class="rounded-s-lg w-5 bg-jumbo-yellow left-0"></div>
+                            <div class="flex flex-row justify-between w-full p-2">
+                                <div class="flex flex-col">
+                                    <span class="font-bold text-md font-semibold">
+                                        @hour.Start.DateName()
+                                    </span>
+                                    <span class="font-medium text-sm">
+                                        @hour.Start.Time() - @hour.End?.Time()
+                                    </span>
+                                    <span class="font-medium text-xs">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+        }
+    </div>
+</div>
+
+

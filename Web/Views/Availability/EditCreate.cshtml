@@ -1,0 +1,53 @@
+@model Web.ViewModels.AvailabilitiesViewModel
+
+@{
+    ViewBag.Title = "Edit Availabilities";
+    Layout = "_EmployeeLayout";
+}
+
+<div class="flex flex-col space-y-5">
+    <div class="flex flex-col">
+        <span class="font-bold text-xl">
+            @if (Model.Availabilities != null && Model.Availabilities.Any())
+            {
+                <span>Bewerken</span>
+            }
+            else
+            {
+                <span>Toevoegen</span>
+            }
+        </span>
+        <span class="text-sm text-gray-500">
+        Vul hieronder uw beschikbaarheden in.
+        </span>
+    </div>
+
+    <form asp-action="EditCreate" method="post" class="space-y-3">
+        @for (var i = 0; i < Model.Availabilities.Count(); i++)
+        {
+            <input asp-for="@Model.Availabilities[i].Id" type="hidden" class="form-control"/>
+            <input asp-for="@Model.Availabilities[i].EmployeeId" type="hidden" class="form-control"/>
+            <input asp-for="@Model.Availabilities[i].DayOfWeek" type="hidden" class="form-control"/>
+            <div class="form-control w-full">
+                <div class="label">
+                    <span class="label-text">
+                        @Model.Availabilities[i].DayOfWeek
+                    </span>
+                </div>
+                <div class="flex space-x-3 w-full">
+                    <div class="w-1/2">
+                        <label for="StartTime">Start Time:</label>
+                        <input asp-for="@Model.Availabilities[i].StartTime" type="time" class="input w-full"/>
+                        @Html.ValidationMessageFor(model => model.Availabilities[i].StartTime, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="w-1/2">
+                        <label for="EndTime">End Time:</label>
+                        <input asp-for="@Model.Availabilities[i].EndTime" type="time" class="input w-full"/>
+                        @Html.ValidationMessageFor(model => model.Availabilities[i].EndTime, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        }
+        <button type="submit" class="btn btn-sm btn-primary mt-3 self-end">Opslaan</button>
+    </form>
+</div>

@@ -1,0 +1,33 @@
+﻿@using Utility.Extensions
+@model IEnumerable<Web.ViewModels.ReplacementRequestViewModel>;
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_EmployeeLayout";
+}
+
+<div class="flex flex-col space-y-5">
+    <span class="font-bold text-xl">
+        VervangingsVerzoeken
+    </span>
+    <div class="flex flex-col space-y-3">
+        @{
+            int previousWeekNumber = -1;
+
+            foreach (var replacementRequest in Model)
+            {
+                var currentWeekNumber = replacementRequest.Shift.Start.Week();
+
+                if (currentWeekNumber != previousWeekNumber)
+                {
+                    <span>Week @currentWeekNumber</span>
+                    previousWeekNumber = currentWeekNumber;
+                }
+
+                @($"{replacementRequest.Shift.Start.DateNameShort()} - {replacementRequest.Shift.End.DateNameShort()}")
+
+                // <partial name="Partials/_ReplacementRequest" model="replacementRequest" />
+            }
+        }
+    </div>
+</div>

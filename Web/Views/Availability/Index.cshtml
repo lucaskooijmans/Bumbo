@@ -1,0 +1,41 @@
+﻿@model Web.ViewModels.AvailabilitiesViewModel
+
+@{
+    ViewBag.Title = "Beschikbaarheden";
+    Layout = "_EmployeeLayout";
+}
+
+<div class="flex flex-col space-y-5">
+    <div class="flex justify-between">
+        <span class="font-bold text-xl">
+            Beschikbaarheden
+        </span>
+        <a asp-controller="Availability" asp-action="EditCreate" class="btn btn-sm btn-primary">
+            @if (Model.Availabilities != null && Model.Availabilities.Any())
+            {
+                <span>Bewerken</span>
+            }
+            else
+            {
+                <span>Toevoegen</span>
+            }
+        </a>
+   
+    </div>
+
+    @if (Model.Availabilities != null && Model.Availabilities.Any())
+    {
+        @foreach (var availability in Model.Availabilities)
+        {
+            <div class="flex flex-col bg-gray-200 rounded p-3">
+                <span class="font-semibold text-md">@availability.DayOfWeek</span>
+                <span>Start: @availability.StartTime?.ToString("hh\\:mm")</span>
+                <span>End: @availability.EndTime?.ToString("hh\\:mm")</span>
+            </div>
+        }
+    }
+    else
+    {
+        <p>Geen beschikbaarheden gevonden</p>
+    }
+</div>

@@ -1,0 +1,30 @@
+@model Web.ViewModels.PrognosisViewModel
+<div class="flex justify-between items-center text-center space-x-3 w-fit">
+    <a class="btn btn-sm btn-info rounded text-white @(Model.WeekNumber != Model.CurrentWeekNumber ? "" : "hidden")" asp-controller="Prognoses" asp-action="Index" asp-route-date="@DateTime.Now">
+        <i class="fa-solid fa-calendar-week"></i>
+    </a>
+    <a class="btn btn-sm btn-warning rounded" asp-controller="Prognoses" asp-action="Index" asp-route-date="@Model.Date.AddDays(-7)">
+        <i class="fa-solid fa-chevron-left"></i>
+    </a>
+    <div class="flex flex-col text-center">
+        <h3 class="text-sm font-bold">Week @Model.WeekNumber - @Model.Date.Year</h3>
+        <p class="text-xs">
+            @Model.Date.AddDays(-(int)Model.Date.DayOfWeek + 1).ToString("d MMMM", new CultureInfo("nl-NL"))
+            -
+            @Model.Date.AddDays(7 - (int)Model.Date.DayOfWeek).ToString("d MMMM", new CultureInfo("nl-NL"))
+        </p>
+    </div>
+    <a class="btn btn-sm btn-warning rounded" asp-controller="Prognoses" asp-action="Index" asp-route-date="@Model.Date.AddDays(7)">
+        <i class="fa-solid fa-chevron-right"></i>
+    </a>
+
+    <button class="btn btn-sm btn-secondary rounded text-white @(Model.Prognosis.Any() ? "hidden" : "")" onclick="showPrognoseCreationOptions.showModal()">
+        <i class="fa-solid fa-plus"></i> Toevoegen
+    </button>
+    <a class="btn btn-sm btn-neutral rounded text-white @(Model.Prognosis.Any() ? "" : "hidden")" asp-controller="Prognoses" asp-action="EditPrognosis" asp-route-date="@Model.Date">
+        <i class="fa-solid fa-clock"></i> Bewerken uren
+    </a>
+    <a class="btn btn-sm btn-neutral rounded text-white @(Model.Expectations.Any() ? "" : "hidden")" asp-controller="Prognoses" asp-action="Edit" asp-route-date="@Model.Date">
+        <i class="fa-solid fa-pen-to-square"></i> Bewerken verwachtingen
+    </a>
+</div>

@@ -1,0 +1,51 @@
+@model IEnumerable<Web.ViewModels.EmployeeViewModel>
+
+@{
+    ViewData["Title"] = "Medewerkers";
+}
+
+<div class="bg-white p-3 rounded mt-16">
+    <div class="flex justify-between py-5">
+        <span class="text-xl">
+            Medewerkers
+        </span>
+        <div>
+            <a asp-action="Create" class="btn btn-sm btn-primary"><i class="fa-solid fa-plus"></i>Toevoegen</a>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th></th>
+            <th>@Html.DisplayNameFor(Model => Model.FirstName)</th>
+            <th>@Html.DisplayNameFor(Model => Model.LastName)</th>
+            <th>@Html.DisplayNameFor(Model => Model.Email)</th>
+            <th>@Html.DisplayNameFor(Model => Model.PhoneNumber)</th>
+            <th>@Html.DisplayNameFor(Model => Model.DateOfBirth)</th>
+            <th>Rol</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var employee in Model)
+        {
+            <tr>
+
+                <th>@employee.Id</th>
+                <td>@employee.FirstName</td>
+                <td>@employee.LastName</td>
+                <td>@employee.Email</td>
+                <td>@employee.PhoneNumber</td>
+                <td>@employee.DateOfBirth</td>
+                <td>@employee.Role</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@employee.Id" class="btn btn-xs btn-warning">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </a>
+                </td>
+
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+<br/>

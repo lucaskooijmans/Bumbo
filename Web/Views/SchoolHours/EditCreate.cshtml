@@ -1,0 +1,35 @@
+@model Web.ViewModels.SchoolHoursViewModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_EmployeeLayout";
+}
+
+<div class="flex flex-col space-y-5">
+    <div class="flex flex-col">
+        <span class="font-bold text-xl">
+            Schooluren
+        </span>
+        <small class="font-light text-sm">Les uren excl. pauze, tussenuren</small>
+    </div>
+    
+    <form asp-action="EditCreate" method="post" class="space-y-3">
+        @foreach (var schoolHour in Model.SchoolHours)
+        {
+            var i = (int)schoolHour.DayOfWeek;
+            <input asp-for="@Model.SchoolHours[i].Id" type="hidden" class="form-control"/>
+            <input asp-for="@Model.SchoolHours[i].DayOfWeek" type="hidden" class="form-control"/>
+            <input asp-for="@Model.SchoolHours[i].EmployeeId" type="hidden" class="form-control"/>
+            <div class="form-control w-full ">
+                <div class="label">
+                    <span class="label-text">
+                        @schoolHour.DayOfWeek
+                    </span>
+                </div>
+                <input asp-for="@Model.SchoolHours[i].Hours" type="number" min="0" max="24" class="input w-full"/>
+                @Html.ValidationMessageFor(Model => Model.SchoolHours[i].Hours, "", new { @class = "text-danger" })
+            </div>
+        }
+        <button type="submit" class="btn btn-sm btn-primary mt-3 self-end">Opslaan</button>
+    </form>
+</div>

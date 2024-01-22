@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "title";
+    Layout = "_layout";
+}
+@model IEnumerable<Web.ViewModels.ShiftViewModel>
+
+<div class="flex flex-col space-y-5">
+    <div class="flex justify-between">
+        <span class="font-bold text-xl">
+            Ruilverzoeken beoordelen
+        </span>
+    </div>
+    <div class="flex flex-col space-y-3">
+        @foreach (var shift in Model)
+        {
+            @Html.Partial("Partials/_ReplacementRequestShift", shift, new ViewDataDictionary(Html.ViewData) { { "Evaluate", true } })
+        }
+    </div>
+</div>

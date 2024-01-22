@@ -1,0 +1,49 @@
+﻿@model Web.ViewModels.ShiftViewModel
+
+<div class="rounded-lg bg-gray-300">
+    <div class="flex space-x-2">
+        <div class="rounded-s-lg w-5 bg-jumbo-yellow left-0"></div>
+        <div class="flex flex-col w-full p-2">
+            <div class="flex flex-row justify-between">
+                <div class="flex flex-col">              
+                    <span class="font-bold text-md font-semibold">
+                        @Model.Start.DateName()
+                    </span>
+                    <span class="font-medium text-sm">
+                        @Model.Start.Time() - @Model.End.Time()
+                    </span>
+                    <span class="font-medium text-xs">
+                        DKW
+                    </span>
+                </div>
+
+                <div class="flex flex-col">
+                    <span class="font-bold text-md font-semibold">
+                        Employee: @Model.Employee.FirstName @Model.Employee.LastName
+                    </span>
+                    <span class="font-bold text-md font-semibold">
+                        Replacing Employee: @Model.ReplacingEmployee.FirstName @Model.ReplacingEmployee.LastName
+                    </span>
+                </div>
+            </div>
+            <div class="flex justify-end mt-2">
+                <form asp-controller="EmployeeShift" asp-action="Evaluate">
+                    @Html.HiddenFor(model => model.Id)
+                    @Html.HiddenFor(model => model.Start)
+                    @Html.HiddenFor(model => model.End)
+                    <input type="hidden" name="employeeId" value="@Model.ReplacingEmployee.Id" />
+                    <input type="hidden" name="status" value="true" />
+                    <button type="submit" class="btn btn-success"><i class="fa-solid fa-check"></i> Approve</button>
+                </form>
+                <form asp-controller="EmployeeShift" asp-action="Evaluate">
+                    @Html.HiddenFor(model => model.Id)
+                    @Html.HiddenFor(model => model.Start)
+                    @Html.HiddenFor(model => model.End)
+                    <input type="hidden" name="employeeId" value="@Model.ReplacingEmployee.Id" />
+                    <input type="hidden" name="status" value="true" />
+                    <button type="submit" class="btn btn-danger ml-2"><i class="fa-solid fa-check"></i> Reject</button>
+                </form>
+            </div>          
+        </div>
+    </div>
+</div>

@@ -1,0 +1,67 @@
+@model Web.ViewModels.PrognosisViewModel
+<div class="bg-base-200 p-3 rounded @(Model.Expectations.Any() ? "" : "hidden")">
+    <table class="table-lg rounded border">
+        <tbody class="rounded">
+        <tr class="border border-black">
+            <th>
+                Afdeling
+            </th>
+            @foreach (var item in Model.Prognosis)
+            {
+                if (item.Department == Departments.Checkout)
+                {
+                    <td class="uppercase font-semibold">
+                        @item.Date.ToString("ddd", new CultureInfo("nl-NL"))
+                        @item.Date.ToString("dd-MM", new CultureInfo("nl-NL"))
+                    </td>
+                }
+            }
+        </tr>
+        <tr class="border border-black">
+            <th>Vers</th>
+            @foreach (var item in Model.Prognosis)
+            {
+                if (item.Department == Departments.Fresh)
+                {
+                    var hours = item.NumberOfHours;
+                    var workers = item.NumberOfHours / 8;
+                    <td>
+                        <p>@hours uur</p>
+                        <p class="text-green-600">@workers pers.</p>
+                    </td>
+                }
+            }
+        </tr>
+        <tr class="border border-black">
+            <th>Vakkenvullen</th>
+            @foreach (var item in Model.Prognosis)
+            {
+                if (item.Department == Departments.Dkw)
+                {
+                    var hours = item.NumberOfHours;
+                    var workers = item.NumberOfHours / 8;
+                    <td>
+                        <p>@hours uur</p>
+                        <p class="text-green-600">@workers pers.</p>
+                    </td>
+                }
+            }
+        </tr>
+        <tr class="border border-black">
+            <th>Kassa</th>
+            @foreach (var item in Model.Prognosis)
+            {
+                if (item.Department == Departments.Checkout)
+                {
+                    var hours = item.NumberOfHours;
+                    var workers = item.NumberOfHours / 8;
+                    <td>
+                        <p>@hours uur</p>
+                        <p class="text-green-600">@workers pers.</p>
+                    </td>
+                }
+            }
+        </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,43 @@
+@model Tuple<Web.ViewModels.WorkedHoursViewModel, Web.ViewModels.CreateRegisteredHourViewModel>
+@{
+    var workedHoursViewModel = Model.Item1;
+    var create = Model.Item2;
+}
+<dialog id="showAddWorkedHours" class="modal">
+    <div class="modal-box">
+        <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                <i class="fa-solid fa-x"></i>
+            </button>
+        </form>
+        <h2 class="font-bold text-lg">Gewerkte uren toevoegen</h2>
+        <form asp-controller="WorkedHours" asp-action="Create">
+            <div class="space-y-3">
+                <div>
+                    <label for="EmployeeId">Medewerker</label>
+                    <select name="EmployeeId" id="EmployeeId" class="select select-bordered w-full">
+                        @foreach (var employee in workedHoursViewModel.Employees)
+                        {
+                            <option value="@employee.Id">@employee.FullName</option>
+                        }
+                    </select>
+                </div>
+                <div class="flex flex-row space-x-4">
+                    <div class="flex flex-col space-y-2 w-1/2">
+                        <label for="Start">Start</label>
+                        <input type="time" id="Start" name="Start" class="input input-bordered" value="@create.Start"/>
+                    </div>
+                    <div class="flex flex-col space-y-2 w-1/2">
+                        <label for="End">Eind</label>
+                        <input type="time" id="End" name="End" class="input input-bordered " value="@create.End"/>
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" name="Date" value="@workedHoursViewModel.Date"/>
+            <div class="modal-action">
+                <button type="submit" class="btn btn-primary">Toevoegen</button>
+            </div>
+        </form>
+    </div>
+</dialog>

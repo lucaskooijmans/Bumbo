@@ -1,0 +1,50 @@
+@using System.ComponentModel.DataAnnotations
+@using System.Reflection
+@model Web.ViewModels.ShiftEditCreateViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h4>Shift</h4>
+<hr/>
+<div class="flex">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="flex flex-col form-group space-y-3">
+                <div>
+                    <label for="department">Afdeling: </label>
+                    <select asp-for="Shift.Department" id="department">
+                        @foreach (Departments department in Enum.GetValues(typeof(Departments)))
+                        {
+                            <option value="@department">@department.GetDisplayName()</option>
+                        }
+                    </select>
+                </div>
+                <input asp-for="Shift.Id" class="hidden" asp-items="ViewBag.BranchId"/>
+                <input asp-for="Shift.BranchId" class="hidden" asp-items="ViewBag.BranchId" value="1"/>
+                <input asp-for="Shift.Start" type="datetime" value="@Model.Date"/>
+                <span asp-validation-for="Shift.Start" class="text-danger"></span>
+                <input asp-for="Shift.End" type="datetime" value="@Model.Date"/>
+                <select multiple asp-for="EmployeeIds">
+                    @foreach (var employee in Model.Employees)
+                    {
+                        <option value="@employee.Id">@employee.FullName</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

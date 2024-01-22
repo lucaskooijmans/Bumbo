@@ -1,0 +1,82 @@
+@using Web.ViewModels
+@model Web.ViewModels.WorkedHoursViewModel
+
+@{
+    ViewData["Title"] = "Geklokte uren";
+}
+
+
+<span class="font-bold text-2xl">
+    Urenregistratie
+</span>
+
+<div class="flex space-x-4">
+    <div class="flex flex-col space-y-5 w-3/4 bg-base-200 p-5 rounded mt-3 h-screen">
+        <span class="font-bold text-xl">
+            Gewerkte uren
+        </span>
+        <form asp-action="Approve" method="post">
+            <input type="hidden" name="Date" value="@Model.Date"/>
+            <div class="flex justify-between py-5">
+                @Html.Partial("Partials/_DaySelector")
+                <div>
+                    <button type="submit" name="type" value="selected" class="btn btn-sm btn-success rounded hidden" id="active">
+                        <i class="fa-solid fa-check"></i>Geselecteerde uren Goedkeuren
+                    </button>
+                    <a class="btn btn-sm btn-disabled rounded" id="disabled">
+                        <i class="fa-solid fa-check"></i>Geselecteerde uren Goedkeuren
+                    </a>
+                    <button type="submit" name="type" value="everything" class="btn btn-sm btn-success rounded">
+                        <i class="fa-solid fa-check"></i>Alles Goedkeuren
+                    </button>
+                    <a class="btn btn-sm btn-info rounded" onclick="showAddWorkedHours.showModal()">
+                        <i class="fa-solid fa-plus"></i>Toevoegen
+                    </a>
+                </div>
+            </div>
+
+            <div class="flex flex-col space-y-3 max-h-full overflow-y-auto">
+                @if (Model.RegisteredHours.Any())
+                {
+                    @foreach (var Registered in Model.RegisteredHours)
+                    {
+                        @Html.Partial("Partials/_WorkedHours", Registered)
+                    }
+                }
+            </div>
+        </form>
+    </div>
+
+    <div class="flex flex-col space-y-5 w-1/4 bg-base-200 p-5 rounded mt-3 h-screen">
+        <span class="font-bold text-xl">
+            Exporteren - Week @Model.WeekNumber
+        </span>
+
+        @if (Model.AllWorkedHoursAreApproved)
+        {
+            <div class="flex flex-col space-y-3">
+                <a class="btn btn-sm btn-success rounded" asp-controller="ExcelExport" asp-action="DownloadExcel" asp-route-date="@Model.Date">
+                    <i class="fa-solid fa-download"></i> Exporteren
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="flex flex-col space-y-3">
+                <span class="text-sm">Keur alle uren in week @Model.WeekNumber goed om te kunnen exporteren</span>
+                <a class="btn btn-sm btn-disabled rounded">
+                    <i class="fa-solid fa-download"></i> Exporteren
+                </a>
+            </div>
+        }
+
+    </div>
+</div>
+@Html.Partial("Modals/_CreateRegisteredHour", new Tuple<WorkedHoursViewModel, CreateRegisteredHourViewModel>(Model, new CreateRegisteredHourViewModel()))
+@if (Model.RegisteredHours.Any())
+{
+    @foreach (var Registered in Model.RegisteredHours)
+    {
+        @Html.Partial("Modals/_EditRegisterdHour", Registered)
+    }
+}

@@ -1,0 +1,14 @@
+@model Web.ViewModels.PrognosisEditCreateViewModel
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1 class="uppercase py-4 font-bold">Bewerken van verwachtingen</h1>
+
+<div class="flex flex-row items-center w-full py-3">
+    <div class="flex flex-col items space-y-5">
+        <form asp-action="Create" method="post">
+            @Html.Partial("Partials/_ExpectationsEditCreate")
+        </form>
+    </div>
+</div>
